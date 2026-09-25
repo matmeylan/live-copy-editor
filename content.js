@@ -360,6 +360,15 @@
     return true;
   }
 
+  // ---------- persistence ----------
+  // The active mode lives in chrome.storage.local ("mode") so it survives
+  // navigation, reloads and new tabs. The panel writes it; every page follows.
+
+  chrome.storage.local.get("mode", (data) => setMode(data.mode || "off"));
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.mode) setMode(changes.mode.newValue || "off");
+  });
+
   // ---------- messaging ----------
 
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {

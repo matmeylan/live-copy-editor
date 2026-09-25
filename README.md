@@ -51,6 +51,7 @@ You are updating the copy (text content) of a website.
 Title: Pricing – Acme
 
 ### Change 1 — text edit
+- Page: https://example.com/pricing
 - Element: <h1>  (selector: `#hero`)
 - Original text:
 ```
@@ -62,6 +63,7 @@ Pricing that scales with you
 ```
 
 ### Change 2 — comment
+- Page: https://example.com/pricing
 - Element: <button>  (selector: `#cta-btn`)
 - Current text: "Start free trial"
 - Request:
@@ -77,4 +79,4 @@ Make this button green and move it above the pricing text
 - `content.js` / `content.css` – hover outlines, in-place editing, comment popover, change logging
 - `panel.html` / `panel.css` / `panel.js` – the side panel UI and prompt export
 
-Edits are stored in `chrome.storage.local`, so they survive reloads and are shared across tabs until cleared.
+Edits and the active mode are stored in `chrome.storage.local`, so both survive navigation, reloads and new tabs. Navigate around a site and keep editing; the log keeps growing until you click **Clear**. Every change in the prompt carries its own page URL.

@@ -54,21 +54,31 @@ function reflectMode(mode, available = true) {
   statusDot.classList.toggle("comment", mode === "comment");
 }
 
+// Mode is stored in chrome.storage.local ("mode") so it persists across
+// navigation, reloads and tabs. The content script on every page follows it.
+let currentMode = "off";
+
 async function syncMode() {
-  const res = await sendToTab({ type: "lce:getMode" });
-  reflectMode(res?.mode || "off", res !== null);
+  const data = await chrome.storage.local.get("mode");
+  currentMode = data.mode || "off";
+  // Ping the page (injecting the content script if needed) to know whether
+  // this tab can be edited at all, e.g. not on chrome:// pages.
+  const res = await sendToTab({ type: "lce:ping" });
+  reflectMode(currentMode, res !== null);
 }
 
 modes.addEventListener("click", async (e) => {
   const btn = e.target.closest(".mode");
   if (!btn) return;
-  const res = await sendToTab({ type: "lce:setMode", mode: btn.dataset.mode });
-  if (res === null) {
-    reflectMode("off", false);
+  const mode = btn.dataset.mode;
+  const res = await sendToTab({ type: "lce:ping" });
+  if (res === null && mode !== "off") {
     showToast("Can't use this page");
     return;
   }
-  reflectMode(res.mode);
+  currentMode = mode;
+  await chrome.storage.local.set({ mode });
+  reflectMode(mode, res !== null);
 });
 
 chrome.tabs.onActivated.addListener(syncMode);
@@ -88,9 +98,14 @@ function save() {
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "local" && changes[STORAGE_KEY]) {
+  if (area !== "local") return;
+  if (changes[STORAGE_KEY]) {
     entries = changes[STORAGE_KEY].newValue || [];
     render();
+  }
+  if (changes.mode) {
+    currentMode = changes.mode.newValue || "off";
+    reflectMode(currentMode, !modes.classList.contains("is-disabled"));
   }
 });
 
@@ -193,12 +208,14 @@ function buildPrompt() {
     for (const e of items.slice().sort((a, b) => a.ts - b.ts)) {
       if (e.kind === "comment") {
         lines.push(`### Change ${n++} — comment`);
+        lines.push(`- Page: ${e.url}`);
         lines.push(`- Element: <${e.tag}>  (selector: \`${e.selector}\`)`);
         if (e.snippet) lines.push(`- Current text: "${e.snippet}"`);
         lines.push("- Request:");
         lines.push(quote(e.comment));
       } else {
         lines.push(`### Change ${n++} — text edit`);
+        lines.push(`- Page: ${e.url}`);
         lines.push(`- Element: <${e.tag}>  (selector: \`${e.selector}\`)`);
         lines.push("- Original text:");
         lines.push(quote(e.before));
