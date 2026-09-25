@@ -1,0 +1,113 @@
+.lce-hover {
+  outline: 1.5px dashed #6b7280 !important;
+  outline-offset: 2px !important;
+  cursor: text !important;
+}
+.lce-hover-comment {
+  outline: 1.5px dashed #4f46e5 !important;
+  outline-offset: 2px !important;
+  cursor: pointer !important;
+}
+.lce-editing {
+  outline: 2px solid #111827 !important;
+  outline-offset: 2px !important;
+  border-radius: 2px;
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08) !important;
+}
+.lce-commenting {
+  outline: 2px solid #4f46e5 !important;
+  outline-offset: 2px !important;
+  border-radius: 2px;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.14) !important;
+}
+@media (prefers-color-scheme: dark) {
+  .lce-editing {
+    outline-color: #f3f4f6 !important;
+    box-shadow: 0 0 0 4px rgba(243, 244, 246, 0.12) !important;
+  }
+}
+.lce-badge {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #111827;
+  color: #f9fafb;
+  font: 500 12px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lce-badge.lce-badge-comment { background: #4f46e5; }
+
+/* Comment popover */
+.lce-popover {
+  position: fixed;
+  z-index: 2147483647;
+  width: 280px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+  font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  box-sizing: border-box;
+}
+.lce-popover * { box-sizing: border-box; font-family: inherit; }
+.lce-popover-target {
+  display: block;
+  margin: 0 0 8px;
+  font: 10.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lce-popover textarea {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  padding: 8px;
+  border-radius: 7px;
+  border: 1px solid #e5e7eb;
+  background: #fafafa;
+  color: #111827;
+  font-size: 13px;
+  line-height: 1.4;
+  outline: none;
+}
+.lce-popover textarea:focus { border-color: #4f46e5; background: #ffffff; }
+.lce-popover-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.lce-popover-hint { flex: 1; font-size: 11px; color: #9ca3af; }
+.lce-popover button {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.lce-popover button.lce-save {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #ffffff;
+}
+.lce-popover button:disabled { opacity: 0.5; cursor: default; }

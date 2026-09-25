@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Copy Editor</title>
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="dot" id="statusDot"></span>
+      <h1>Copy edits</h1>
+      <span class="count" id="count">0</span>
+    </div>
+    <div class="modes" id="modes" role="radiogroup" aria-label="Mode">
+      <button type="button" class="mode is-active" data-mode="off" role="radio" aria-checked="true">Off</button>
+      <button type="button" class="mode" data-mode="edit" role="radio" aria-checked="false" title="Click text on the page to rewrite it">Edit</button>
+      <button type="button" class="mode" data-mode="comment" role="radio" aria-checked="false" title="Click any element to leave a note">Comment</button>
+    </div>
+  </header>
+
+  <main id="list" class="list">
+    <div class="empty" id="empty">
+      <p class="empty-title">No edits yet</p>
+      <p class="empty-hint"><strong>Edit</strong> — click any text on the page and rewrite it. <kbd>Enter</kbd> saves, <kbd>Esc</kbd> cancels.</p>
+      <p class="empty-hint"><strong>Comment</strong> — click any element and leave a note: remove it, restyle it, move it.</p>
+    </div>
+  </main>
+
+  <footer class="bottom">
+    <button class="btn ghost" id="clearBtn" title="Remove all logged edits">Clear</button>
+    <button class="btn primary" id="exportBtn" title="Copy a prompt describing all edits">Export prompt</button>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <template id="entryTpl">
+    <article class="entry">
+      <div class="entry-head">
+        <span class="kind" aria-hidden="true"></span>
+        <span class="tag"></span>
+        <span class="selector" title=""></span>
+        <button class="icon-btn remove" title="Remove this entry" aria-label="Remove">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 3l6 6M9 3l-6 6"/></svg>
+        </button>
+      </div>
+      <p class="before"></p>
+      <p class="after"></p>
+      <p class="snippet"></p>
+      <p class="comment"></p>
+    </article>
+  </template>
+
+  <template id="groupTpl">
+    <section class="group">
+      <h2 class="group-title"><span class="page-title"></span><span class="page-url"></span></h2>
+      <div class="group-entries"></div>
+    </section>
+  </template>
+
+  <script src="panel.js"></script>
+</body>
+</html>
