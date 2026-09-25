@@ -1,0 +1,101 @@
+name: Release
+
+# PRs: run checks and build the package.
+# Push to main: also publish a GitHub Release and ship to the Chrome Web Store.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two publishes at once; the Web Store rejects overlapping submissions.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Checks
+        run: scripts/check.sh
+
+      # The Web Store refuses a version it has already seen, so every build gets a
+      # fresh one: MAJOR.MINOR from manifest.json, PATCH = this workflow's run number.
+      # Bump MAJOR or MINOR in manifest.json by hand when you want to.
+      - name: Compute version
+        id: version
+        run: |
+          base=$(node -p 'require("./manifest.json").version.split(".").slice(0,2).join(".")')
+          echo "version=${base}.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: scripts/build.sh "${{ steps.version.outputs.version }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-copy-editor-${{ steps.version.outputs.version }}
+          path: dist/live-copy-editor.zip
+
+  release:
+    needs: build
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: live-copy-editor-${{ needs.build.outputs.version }}
+
+      # A stable download link for manual installs:
+      # https://github.com/<owner>/<repo>/releases/latest/download/live-copy-editor.zip
+      - name: GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${VERSION}" live-copy-editor.zip \
+            --repo "${{ github.repository }}" \
+            --target "${{ github.sha }}" \
+            --title "v${VERSION}" \
+            --generate-notes
+
+      - name: Check Web Store secrets
+        id: cws
+        env:
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: |
+          missing=()
+          for v in EXTENSION_ID PUBLISHER_ID CLIENT_ID CLIENT_SECRET REFRESH_TOKEN; do
+            [[ -z "${!v}" ]] && missing+=("CWS_$v")
+          done
+          if (( ${#missing[@]} )); then
+            echo "::notice::Skipping Chrome Web Store publish. Missing secrets: ${missing[*]}"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload and publish to Chrome Web Store
+        if: steps.cws.outputs.ready == 'true'
+        env:
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: npx --yes chrome-webstore-upload-cli@4.0.1 --source live-copy-editor.zip
