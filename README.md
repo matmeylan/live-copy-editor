@@ -32,8 +32,8 @@ Works in Chrome, Edge, Brave and Arc.
 | Action | How |
 | --- | --- |
 | Pick a mode | **Off / Edit / Comment** switch in the side panel |
-| See if a mode is on | The toolbar icon shows an **ON** badge (green for Edit, indigo for Comment) |
-| Turn a mode off | Click the toolbar icon while it shows **ON**, or close the side panel |
+| See if a mode is on | The toolbar icon shows a small green dot |
+| Turn a mode off | Click the toolbar icon while it shows the dot, or close the side panel |
 | Edit text | In Edit mode, click any text element on the page, type |
 | Save an edit | Press **Enter** or click elsewhere |
 | Cancel an edit | Press **Esc** |
