@@ -6,6 +6,11 @@ on:
   pull_request:
   push:
     branches: [main]
+    # Docs-only changes don't ship a new version (each version is a store review).
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+      - ".gitignore"
   workflow_dispatch:
 
 # Never run two publishes at once; the Web Store rejects overlapping submissions.

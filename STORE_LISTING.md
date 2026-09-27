@@ -28,9 +28,12 @@ Every edit and comment lands in a small side panel, grouped by page. Remove what
 - Stays on as you navigate, so you can review a whole site in one pass
 - Nothing leaves your browser: no account, no server, no tracking
 
-**Screenshots** (1280×800, ready to upload): `docs/store/1-edit.png`, `docs/store/2-comment.png`, `docs/store/3-export.png`
+**Screenshots** (1280×800, 24-bit, no alpha, ready to upload), PNG or JPEG:
+`docs/store/1-edit`, `docs/store/2-comment`, `docs/store/3-export`, `docs/store/4-dark`
 
-**Small promo tile** (440×280): `docs/store/promo-440x280.png`
+**Small promo tile** (440×280): `docs/store/promo-440x280`
+
+Don't upload anything from `docs/screens/`: those are 2× captures for the README and the store rejects their size.
 
 **Icon:** `icons/icon128.png`
 
