@@ -17,7 +17,7 @@ When you're done, **Export prompt** copies a ready-to-paste prompt that tells a 
 
 **Manually, before the listing is live**, which takes about a minute:
 
-1. **Download** [live-copy-editor.zip](https://github.com/matmeylan/live-copy-editor-/releases/latest/download/live-copy-editor.zip) and unzip it. Keep the folder somewhere permanent, like Documents.
+1. **Download** [live-copy-editor.zip](https://github.com/matmeylan/live-copy-editor/releases/latest/download/live-copy-editor.zip) and unzip it. Keep the folder somewhere permanent, like Documents.
 2. **Open Chrome's extensions page.** Paste `chrome://extensions` into the address bar and press Enter.
 3. **Turn on Developer mode.** It's the switch in the top-right corner.
 4. **Click "Load unpacked"** (top-left) and pick the unzipped folder.

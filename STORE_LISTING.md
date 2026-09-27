@@ -57,4 +57,4 @@ Lets a user edit text and annotate elements on the current web page, keeps a log
 
 **Data usage:** Check nothing. The extension does not collect or transmit user data. Certify the three disclosures.
 
-**Privacy policy URL:** https://github.com/matmeylan/live-copy-editor-/blob/main/PRIVACY.md
+**Privacy policy URL:** https://github.com/matmeylan/live-copy-editor/blob/main/PRIVACY.md

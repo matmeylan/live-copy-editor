@@ -13,4 +13,4 @@ Live Copy Editor does not collect, transmit, sell or share any data.
 
 No analytics, no tracking, no third-party code.
 
-Questions: open an issue at https://github.com/matmeylan/live-copy-editor-/issues
+Questions: open an issue at https://github.com/matmeylan/live-copy-editor/issues
