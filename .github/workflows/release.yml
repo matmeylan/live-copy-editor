@@ -12,6 +12,11 @@ on:
       - "**.md"
       - ".gitignore"
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: log in and read the store status, but upload nothing and create no release"
+        type: boolean
+        default: true
 
 # Never run two publishes at once; the Web Store rejects overlapping submissions.
 concurrency:
@@ -67,6 +72,7 @@ jobs:
       # A stable download link for manual installs:
       # https://github.com/<owner>/<repo>/releases/latest/download/live-copy-editor.zip
       - name: GitHub Release
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -118,3 +124,4 @@ jobs:
           publisher-id: ${{ vars.CWS_PUBLISHER_ID }}
           item-id: ${{ vars.CWS_EXTENSION_ID }}
           zip: live-copy-editor.zip
+          dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}

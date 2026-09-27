@@ -112,4 +112,6 @@ CI logs in to Google with Workload Identity Federation: GitHub proves the run co
 2. In the Chrome Web Store Developer Dashboard, under **Account**, add the service account email the script prints.
 3. Add the four repository variables the script prints under **Settings → Secrets and variables → Actions → Variables**.
 
+To check the setup without shipping anything, run the **Release** workflow manually from the Actions tab. Manual runs default to a dry run: they log in to Google and read the item's store status, then stop.
+
 Store listing text and permission justifications are in [STORE_LISTING.md](STORE_LISTING.md). The privacy policy is [PRIVACY.md](PRIVACY.md).
