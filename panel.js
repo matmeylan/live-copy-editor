@@ -84,6 +84,14 @@ modes.addEventListener("click", async (e) => {
 chrome.tabs.onActivated.addListener(syncMode);
 chrome.tabs.onUpdated.addListener((_id, info) => { if (info.status === "complete") syncMode(); });
 
+// Hold a port to the service worker while the panel is open; the worker turns
+// the mode off when it disconnects (panel closed). Reconnect if the worker
+// itself was stopped, so it keeps knowing the panel is open.
+function connectToWorker() {
+  chrome.runtime.connect({ name: "panel" }).onDisconnect.addListener(connectToWorker);
+}
+connectToWorker();
+
 // ---------- storage ----------
 
 function load() {
