@@ -179,20 +179,7 @@ clearBtn.addEventListener("click", () => {
 // ---------- export ----------
 
 function buildPrompt() {
-  const hasEdits = entries.some((e) => e.kind !== "comment");
-  const hasComments = entries.some((e) => e.kind === "comment");
   const lines = [];
-  lines.push("You are updating a website based on changes I marked up live in the browser.");
-  lines.push("");
-  lines.push("Below is a list of changes, grouped by page. There are two kinds:");
-  if (hasEdits) lines.push("- **Text edit**: find where the ORIGINAL text lives in the source code (templates, components, markdown/content files, i18n/translation files, CMS fixtures, etc.) and replace it with the NEW text.");
-  if (hasComments) lines.push("- **Comment**: a request about a specific element (remove it, restyle it, move it, change its behaviour, ...). Find the element in the source using the tag, selector and current text as hints, and implement the request.");
-  lines.push("");
-  lines.push("Rules:");
-  lines.push("- Make only the changes listed. Preserve markup, formatting, variables/interpolations, links, and surrounding code unless a change requires otherwise.");
-  lines.push("- If the same text or element appears in several places, update the one that renders on the page/element described; ask if it is ambiguous.");
-  lines.push("- The CSS selector and tag come from the rendered DOM and are hints, not necessarily the source structure.");
-  lines.push("");
 
   const byUrl = new Map();
   for (const e of entries) {

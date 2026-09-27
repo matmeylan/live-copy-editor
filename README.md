@@ -47,8 +47,6 @@ Editing the same element twice keeps the original text and updates only the new 
 ## What the exported prompt looks like
 
 ```
-You are updating the copy (text content) of a website.
-...
 ## Page: https://example.com/pricing
 Title: Pricing – Acme
 
