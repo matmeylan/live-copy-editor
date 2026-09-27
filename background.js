@@ -1,15 +1,13 @@
 // Live Copy Editor — service worker.
 // The toolbar icon mirrors the mode stored in chrome.storage.local ("mode"):
 //   - off:  plain icon; clicking it opens the side panel.
-//   - on:   green dot on the icon; clicking it turns the mode off.
+//   - on:   green ON badge on the icon; clicking it turns the mode off.
 // Closing the side panel also turns the mode off.
 
-// Chrome sizes the badge to its text, so a single space gives the smallest
-// badge: a small green dot on the icon.
 const BADGE = {
   off: { text: "", title: "Live Copy Editor" },
-  edit: { text: " ", color: "#10b981", title: "Live Copy Editor · Editing (click to turn off)" },
-  comment: { text: " ", color: "#10b981", title: "Live Copy Editor · Commenting (click to turn off)" }
+  edit: { text: "ON", color: "#10b981", title: "Live Copy Editor · Editing (click to turn off)" },
+  comment: { text: "ON", color: "#10b981", title: "Live Copy Editor · Commenting (click to turn off)" }
 };
 
 function reflectMode(mode) {
@@ -17,6 +15,7 @@ function reflectMode(mode) {
   chrome.action.setBadgeText({ text: b.text });
   if (b.color) {
     chrome.action.setBadgeBackgroundColor({ color: b.color });
+    chrome.action.setBadgeTextColor?.({ color: "#ffffff" });
   }
   chrome.action.setTitle({ title: b.title });
   // When off, Chrome opens the panel itself. When on, the click reaches
