@@ -97,8 +97,19 @@ Every push to `main` runs [`.github/workflows/release.yml`](.github/workflows/re
 1. Runs the checks.
 2. Builds the zip with version `MAJOR.MINOR.<run number>`, taking `MAJOR.MINOR` from `manifest.json`.
 3. Publishes a GitHub Release with the zip attached.
-4. Uploads and submits it to the Chrome Web Store for review, if the `CWS_*` secrets are set. Without them the step is skipped with a notice.
+4. Uploads the zip to the Chrome Web Store and submits it for review. Without the Web Store setup below, this step is skipped with a notice.
 
-Pull requests run steps 1 and 2 only. Bump `MAJOR.MINOR` in `manifest.json` by hand when you want a visible version jump.
+Pull requests run steps 1 and 2 only. Docs-only pushes don't release. Bump `MAJOR.MINOR` in `manifest.json` by hand when you want a visible version jump.
+
+### Chrome Web Store setup (one time, no secrets)
+
+CI logs in to Google with Workload Identity Federation: GitHub proves the run comes from this repo's `main` branch and Google issues a 30-minute token. Nothing is stored or rotated.
+
+1. In [Google Cloud Shell](https://console.cloud.google.com/?cloudshell=true), with a project selected, run:
+   ```
+   curl -fsSL https://raw.githubusercontent.com/matmeylan/live-copy-editor/main/scripts/setup-google-cloud.sh | bash
+   ```
+2. In the Chrome Web Store Developer Dashboard, under **Account**, add the service account email the script prints.
+3. Add the four repository variables the script prints under **Settings → Secrets and variables → Actions → Variables**.
 
 Store listing text and permission justifications are in [STORE_LISTING.md](STORE_LISTING.md). The privacy policy is [PRIVACY.md](PRIVACY.md).
