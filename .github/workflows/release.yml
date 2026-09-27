@@ -83,21 +83,21 @@ jobs:
             --generate-notes
 
       # Chrome Web Store publishing uses Workload Identity Federation: no stored secret.
-      # One-time setup: scripts/setup-google-cloud.sh, then four repository variables.
+      # One-time setup: scripts/setup-google-cloud.sh, then four repository secrets.
       - name: Check Web Store setup
         id: cws
         env:
-          CWS_WIF_PROVIDER: ${{ vars.CWS_WIF_PROVIDER }}
-          CWS_SERVICE_ACCOUNT: ${{ vars.CWS_SERVICE_ACCOUNT }}
-          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
-          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          CWS_WIF_PROVIDER: ${{ secrets.CWS_WIF_PROVIDER }}
+          CWS_SERVICE_ACCOUNT: ${{ secrets.CWS_SERVICE_ACCOUNT }}
+          CWS_PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+          CWS_EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
         run: |
           missing=()
           for v in CWS_WIF_PROVIDER CWS_SERVICE_ACCOUNT CWS_PUBLISHER_ID CWS_EXTENSION_ID; do
             [[ -z "${!v}" ]] && missing+=("$v")
           done
           if (( ${#missing[@]} )); then
-            echo "::notice::Skipping Chrome Web Store publish. Missing repository variables: ${missing[*]}"
+            echo "::notice::Skipping Chrome Web Store publish. Missing repository secrets: ${missing[*]}"
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
@@ -108,8 +108,8 @@ jobs:
         if: steps.cws.outputs.ready == 'true'
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
-          workload_identity_provider: ${{ vars.CWS_WIF_PROVIDER }}
-          service_account: ${{ vars.CWS_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ secrets.CWS_WIF_PROVIDER }}
+          service_account: ${{ secrets.CWS_SERVICE_ACCOUNT }}
           token_format: access_token
           access_token_scopes: https://www.googleapis.com/auth/chromewebstore
           access_token_lifetime: 1800s
@@ -121,7 +121,7 @@ jobs:
         uses: hamzahamidi/publish-to-chrome-web-store@c8919147f8de0d6f1129bec36345e4a9aa638af9 # v1.2.2
         with:
           access-token: ${{ steps.auth.outputs.access_token }}
-          publisher-id: ${{ vars.CWS_PUBLISHER_ID }}
-          item-id: ${{ vars.CWS_EXTENSION_ID }}
+          publisher-id: ${{ secrets.CWS_PUBLISHER_ID }}
+          item-id: ${{ secrets.CWS_EXTENSION_ID }}
           zip: live-copy-editor.zip
           dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}

@@ -72,8 +72,8 @@ Done. Two things left, outside Google Cloud:
 1) Chrome Web Store Developer Dashboard > Account > Service account:
    add   $SA_EMAIL
 
-2) GitHub repo > Settings > Secrets and variables > Actions > Variables tab,
-   add these repository variables:
+2) GitHub repo > Settings > Secrets and variables > Actions,
+   add these repository secrets:
 
    CWS_WIF_PROVIDER     projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/$POOL/providers/$PROVIDER
    CWS_SERVICE_ACCOUNT  $SA_EMAIL

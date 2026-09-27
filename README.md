@@ -110,7 +110,7 @@ CI logs in to Google with Workload Identity Federation: GitHub proves the run co
    curl -fsSL https://raw.githubusercontent.com/matmeylan/live-copy-editor/main/scripts/setup-google-cloud.sh | bash
    ```
 2. In the Chrome Web Store Developer Dashboard, under **Account**, add the service account email the script prints.
-3. Add the four repository variables the script prints under **Settings → Secrets and variables → Actions → Variables**.
+3. Add the four values the script prints as repository secrets under **Settings → Secrets and variables → Actions**.
 
 To check the setup without shipping anything, run the **Release** workflow manually from the Actions tab. Manual runs default to a dry run: they log in to Google and read the item's store status, then stop.
 
