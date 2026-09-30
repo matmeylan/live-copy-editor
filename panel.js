@@ -255,7 +255,19 @@ function showToast(msg) {
   toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
+// ---------- version ----------
+
+// Store builds carry the CI version (e.g. 1.0.8); an unpacked install shows
+// manifest.json's own version, so tag it to tell the two apart.
+async function showVersion() {
+  const { version } = chrome.runtime.getManifest();
+  let dev = false;
+  try { dev = (await chrome.management.getSelf()).installType === "development"; } catch {}
+  $("version").textContent = `v${version}${dev ? " · unpacked" : ""}`;
+}
+
 // ---------- init ----------
 
 load();
 syncMode();
+showVersion();
